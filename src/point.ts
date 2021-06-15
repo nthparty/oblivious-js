@@ -67,17 +67,16 @@ export class Point extends Uint8Array {
 
     /**
      * A point cannot be a left-hand argument.
-     * @param {Point} _self Ristretto255 point object.
+     * @param {Point} _this Ristretto255 point object.
      * @param {Scalar} _other Ristretto255 scalar object.
      * @returns {Point} Ristretto255 point object placeholder (method throws error).
      */
-    static mul(_self: Point, _other: Scalar): Point {
+    static mul(_this: Point, _other: Scalar): Point {
         throw TypeError('point must be on right-hand side of multiplication operator');
     }
 
     /**
      * Return point multiplied by supplied scalar.
-     * @param {Point} self Ristretto255 point object.
      * @param {Scalar} other Ristretto255 scalar object.
      * @returns {Point} Product point.
      */
@@ -87,7 +86,6 @@ export class Point extends Uint8Array {
 
     /**
      * Return sum of the supplied points.
-     * @param {Point} self Ristretto255 point object.
      * @param {Point} other Ristretto255 point object.
      * @returns {Point} Point sum.
      */
@@ -97,7 +95,6 @@ export class Point extends Uint8Array {
 
     /**
      * Return result of subtracting second point from first point.
-     * @param {Point} self Ristretto255 point object.
      * @param {Point} other Ristretto255 point object.
      * @returns {Point} Point difference.
      */
@@ -107,7 +104,6 @@ export class Point extends Uint8Array {
 
     /**
      * Convert to equivalent Base64 UTF-8 string representation.
-     * @param {Point} s Ristretto255 point object.
      * @returns {string} Base64 UTF-8 string representation of the point.
      */
     to_base64(this: Point): string {

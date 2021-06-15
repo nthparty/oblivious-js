@@ -65,7 +65,6 @@ export class Scalar extends Uint8Array {
     /**
      * Return inverse of scalar modulo
      * 2**252 + 27742317777372353535851937790883648493.
-     * @param {Scalar} this Ristretto255 scalar object.
      * @returns {Scalar} Scalar inverse over L.
      */
     invert(this: Scalar): Scalar {
@@ -75,7 +74,6 @@ export class Scalar extends Uint8Array {
     /**
      * Return inverse of scalar modulo (alias of `.invert()`)
      * 2**252 + 27742317777372353535851937790883648493.
-     * @param {Scalar} this Ristretto255 scalar object.
      * @returns {Scalar} Scalar inverse over L.
      */
     inverse(this: Scalar): Scalar {
@@ -84,7 +82,6 @@ export class Scalar extends Uint8Array {
 
     /**
      * Multiply supplied point or scalar by this scalar.
-     * @param {Scalar} this Ristretto255 scalar object.
      * @param {Scalar | Point} other Ristretto255 point object or scalar object.
      * @returns {Scalar | Point} Point scalar product or product of scalars.
      */
@@ -92,7 +89,6 @@ export class Scalar extends Uint8Array {
 
     /**
      * A scalar cannot be on the right-hand side of a non-scalar.
-     * @param {Point} this Ristretto255 scalar object.
      * @param {Scalar} other Ristretto255 scalar object.
      * @returns {Scalar} (Method throws error.)
      */
@@ -112,7 +108,6 @@ export class Scalar extends Uint8Array {
 
     /**
      * Convert to equivalent Base64 UTF-8 string representation.
-     * @param {Scalar} s Ristretto255 scalar object.
      * @returns {string} Base64 UTF-8 string representation of the scalar.
      */
     to_base64(this): string {

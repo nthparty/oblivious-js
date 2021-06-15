@@ -1,6 +1,6 @@
 import { Sodium } from './sodium';
-import { Point } from './point';;
-import { Scalar } from './scalar';;
+import { Point } from './point';
+import { Scalar } from './scalar';
 
 /**
  * Wrapper class for primitive operations.

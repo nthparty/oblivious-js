@@ -70,9 +70,9 @@ export class Sodium {
 
     /**
      * Return base point multiplied by supplied scalar.
-     * @param {Uint8Array} e Byte array representing the desired scalar (e)xponent.
+     * @param {Uint8Array} e Byte array representing the desired scalar exponent.
      * @returns {Uint8Array} Byte array representing a Ristretto255 point.
-     **/
+     */
     static bas(e: Uint8Array): Uint8Array {
         return sodium.crypto_scalarmult_ristretto255_base(e);
     }
