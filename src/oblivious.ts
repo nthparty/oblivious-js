@@ -9,4 +9,5 @@ export class Oblivious {
     public static Sodium = Sodium;
     public static Point = Point;
     public static Scalar = Scalar;
+    public static ready: Promise<void> = Sodium.ready;
 }
