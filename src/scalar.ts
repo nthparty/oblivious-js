@@ -12,12 +12,17 @@ export class Scalar extends Uint8Array {
      * Return scalar object corresponding to supplied bytes-like object.
      * No checking is performed to confirm that the bytes-like object
      * is a valid scalar.
+     * @param {Uint8Array} bs Byte array representing a Ristretto255 scalar.
+     * @returns {Scalar} New Ristretto255 scalar object.
      */
     constructor(bs: Uint8Array) {
         super(bs !== null ? bs as Scalar : Scalar.random());
     }
 
-    /* Return random non-zero scalar object. */
+    /**
+     * Return random non-zero scalar object.
+     * @returns {Scalar} Ristretto255 scalar object.
+     */
     static random(): Scalar {
         return Sodium.rnd() as Scalar;
     }
@@ -25,13 +30,19 @@ export class Scalar extends Uint8Array {
     /**
      * Return scalar object obtained by transforming supplied bytes-like
      * object if it is possible to do; otherwise, return `null`.
+     * @param {Uint8Array} bs Byte array representing a candidate Ristretto255 scalar.
+     * @returns {Scalar} New Ristretto255 scalar object.
      */
     static bytes(bs: Uint8Array): Scalar {
         const s = Sodium.scl(bs);
         return new Scalar(s !== null ? s : null);
     }
 
-    /* Return scalar object by hashing supplied bytes-like object. */
+    /**
+     * Return scalar object by hashing supplied bytes-like object.
+     * @param {Uint8Array} bs Byte array to hash to scalar.
+     * @returns {Scalar} Ristretto255 scalar object.
+     */
     static hash(bs: Uint8Array): Scalar {
         let h: Uint8Array = Sodium.hash(bs);
         let s: Uint8Array = Sodium.scl(h);
@@ -42,7 +53,11 @@ export class Scalar extends Uint8Array {
         return new Scalar(s);
     }
 
-    /* Convert Base64 UTF-8 string representation of a scalar to a scalar instance. */
+    /**
+     * Convert Base64 UTF-8 string representation of a scalar to a scalar instance.
+     * @param {string} s Base64 UTF-8 string representation of a scalar.
+     * @returns {Scalar} Ristretto255 scalar object.
+     */
     static from_base64(s: string): Scalar {
         return Buffer.from(s, 'base64');
     }
@@ -50,23 +65,37 @@ export class Scalar extends Uint8Array {
     /**
      * Return inverse of scalar modulo
      * 2**252 + 27742317777372353535851937790883648493.
+     * @param {Scalar} this Ristretto255 scalar object.
+     * @returns {Scalar} Scalar inverse over L.
      */
     invert(this: Scalar): Scalar {
         return new Scalar(Sodium.inv(this));
     }
 
     /**
-     * Return inverse of scalar modulo
+     * Return inverse of scalar modulo (alias of `.invert()`)
      * 2**252 + 27742317777372353535851937790883648493.
+     * @param {Scalar} this Ristretto255 scalar object.
+     * @returns {Scalar} Scalar inverse over L.
      */
     inverse(this: Scalar): Scalar {
-        return new Scalar(Sodium.inv(this));
+        return this.invert();
     }
 
-    /* Multiply supplied point or scalar by this scalar. */
-    mul(this: Scalar, other: Scalar | Point): Scalar;
+    /**
+     * Multiply supplied point or scalar by this scalar.
+     * @param {Scalar} this Ristretto255 scalar object.
+     * @param {Scalar | Point} other Ristretto255 point object or scalar object.
+     * @returns {Scalar | Point} Point scalar product or product of scalars.
+     */
+    mul(this: Scalar, other: Scalar | Point): Scalar | Point;
 
-    /* A scalar cannot be on the right-hand side of a non-scalar. */
+    /**
+     * A scalar cannot be on the right-hand side of a non-scalar.
+     * @param {Point} this Ristretto255 scalar object.
+     * @param {Scalar} other Ristretto255 scalar object.
+     * @returns {Scalar} (Method throws error.)
+     */
     mul(this: Point, other: Scalar): Scalar
 
     mul(this: any, other: any): any {
@@ -81,7 +110,11 @@ export class Scalar extends Uint8Array {
         }
     }
 
-    /* Convert to equivalent Base64 UTF-8 string representation. */
+    /**
+     * Convert to equivalent Base64 UTF-8 string representation.
+     * @param {Scalar} s Ristretto255 scalar object.
+     * @returns {string} Base64 UTF-8 string representation of the scalar.
+     */
     to_base64(this): string {
         return Buffer.from(this).toString('base64');
     }
