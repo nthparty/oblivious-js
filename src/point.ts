@@ -16,7 +16,7 @@ export class Point extends Uint8Array {
      * @returns {Point} New Ristretto255 point object.
      */
     constructor(bs: Uint8Array) {
-        super(bs !== null ? bs : Point.random());
+        super(bs !== null ? bs : Sodium.pnt(null));
     }
 
     /**
@@ -24,7 +24,7 @@ export class Point extends Uint8Array {
      * @returns {Point} Ristretto255 point object.
      */
     static random(): Point {
-        return Sodium.pnt(null) as Point;
+        return new Point(null);
     }
 
     /**
@@ -33,7 +33,7 @@ export class Point extends Uint8Array {
      * @returns {Point} Ristretto255 point object.
      */
     static bytes(bs: Uint8Array): Point {
-        return Sodium.pnt(bs) as Point;
+        return new Point(Sodium.pnt(bs));
     }
 
     /**
@@ -42,7 +42,7 @@ export class Point extends Uint8Array {
      * @returns {Point} Ristretto255 point object.
      */
     static hash(bs: Uint8Array): Point {
-        return Sodium.pnt(Sodium.hash(bs)) as Point;
+        return new Point(Sodium.pnt(Sodium.hash(bs)));
     }
 
     /**

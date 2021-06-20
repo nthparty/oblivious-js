@@ -16,7 +16,16 @@ export class Scalar extends Uint8Array {
      * @returns {Scalar} New Ristretto255 scalar object.
      */
     constructor(bs: Uint8Array) {
-        super(bs !== null ? bs as Scalar : Scalar.random());
+        if (bs !== null) {
+            const s = Sodium.scl(bs);
+            if (s == null) {
+                throw TypeError('Invalid scalar.');
+            } else {
+                super(s);
+            }
+        } else {
+            super(bs !== null ? bs : Sodium.rnd());
+        }
     }
 
     /**
@@ -24,7 +33,7 @@ export class Scalar extends Uint8Array {
      * @returns {Scalar} Ristretto255 scalar object.
      */
     static random(): Scalar {
-        return Sodium.rnd() as Scalar;
+        return new Scalar(Sodium.rnd());
     }
 
     /**
@@ -81,6 +90,24 @@ export class Scalar extends Uint8Array {
     }
 
     /**
+     * Add supplied scalar to this scalar.
+     * @param {Scalar} other Ristretto255 scalar object.
+     * @returns {Scalar} Scalar sum.
+     */
+    add(this: Scalar, other: Scalar): Scalar {
+        return new Scalar(Sodium.sad(this, other));
+    };
+
+    /**
+     * Subtract supplied scalar by this scalar.
+     * @param {Scalar} other Ristretto255 scalar object.
+     * @returns {Scalar} Scalar difference.
+     */
+    sub(this: Scalar, other: Scalar): Scalar {
+        return new Scalar(Sodium.ssb(this, other));
+    };
+
+    /**
      * Multiply supplied point or scalar by this scalar.
      * @param {Scalar | Point} other Ristretto255 point object or scalar object.
      * @returns {Scalar | Point} Point scalar product or product of scalars.
@@ -98,10 +125,10 @@ export class Scalar extends Uint8Array {
         if (this instanceof Point) {
             throw TypeError('scalar must be on left-hand side of multiplication operator');
         }
-        if (other instanceof  Scalar) {
+        if (other instanceof Scalar) {
             return new Scalar(Sodium.smu(this, other));
         }
-        if (other instanceof  Point) {
+        if (other instanceof Point) {
             return new Point(Sodium.mul(this, other));
         }
     }

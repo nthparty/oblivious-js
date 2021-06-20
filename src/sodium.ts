@@ -24,7 +24,7 @@ export class Sodium {
             return this.rnd();
         }
         if (s.length > 32) {
-            s = sodium.crypto_core_ed25519_scalar_reduce(s);
+            s = sodium.crypto_core_ristretto255_scalar_reduce(s);
         }
         const zero: Uint8Array = (new Uint8Array(32)).fill(0);
         const sr: Uint8Array = sodium.crypto_core_ristretto255_scalar_add(s, zero);
@@ -78,13 +78,33 @@ export class Sodium {
     }
 
     /**
+     * Return sum of the supplied scalars.
+     * @param {Uint8Array} s1 Byte array representing a Ristretto255 scalar.
+     * @param {Uint8Array} s2 Byte array representing a Ristretto255 scalar.
+     * @returns {Uint8Array} Byte array representing the scalar sum.
+     */
+    static sad(s1: Uint8Array, s2: Uint8Array): Uint8Array {
+        return sodium.crypto_core_ristretto255_scalar_add(s1, s2);
+    }
+
+    /**
+     * Return difference of the supplied scalars.
+     * @param {Uint8Array} s1 Byte array representing a Ristretto255 scalar.
+     * @param {Uint8Array} s2 Byte array representing a Ristretto255 scalar.
+     * @returns {Uint8Array} Byte array representing the scalar difference.
+     */
+    static ssb(s1: Uint8Array, s2: Uint8Array): Uint8Array {
+        return sodium.crypto_core_ristretto255_scalar_sub(s1, s2);
+    }
+
+    /**
      * Return product of the supplied point and scalar.
      * @param {Uint8Array} s Byte array representing a Ristretto255 scalar.
      * @param {Uint8Array} p Byte array representing a Ristretto255 point.
      * @returns {Uint8Array} Byte array representing the product point.
      */
     static mul(s: Uint8Array, p: Uint8Array): Uint8Array {
-        return sodium.crypto_core_ristretto255_scalar_mul(s, p);
+        return sodium.crypto_scalarmult_ristretto255(s, p);
     }
 
     /**
