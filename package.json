@@ -1,17 +1,29 @@
 {
-  "name": "oblivious",
-  "version": "0.1.0",
+  "name": "@nthparty/oblivious",
+  "version": "1.0.0",
   "description": "JavaScript library that serves as an API for common primitives used to implement OPRF and OT protocols.",
   "main": "dist/oblivious.js",
   "scripts": {
     "start": "tsc && node dist/oblivious.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "ts-node test/test_oblivious.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nthparty/oblivious-js.git"
   },
   "author": "Nth Party, Ltd.",
+  "contributors": [
+    {
+      "name": "Wyatt Howe",
+      "email": "wyatt@nthparty.com",
+      "url": "nthparty.com"
+    },
+    {
+      "name": "Andrei Lapets",
+      "email": "andrei@nthparty.com",
+      "url": "nthparty.com"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/nthparty/oblivious-js/issues"
