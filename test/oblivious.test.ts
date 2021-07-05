@@ -6,29 +6,6 @@
 
 import { Oblivious } from "../src/oblivious";
 
-function assertTrue(condition: boolean): asserts condition {
-    if (condition !== true) {
-        throw new Error('Assertion failed.');
-    }
-}
-
-function assertEqual(bytes1: Uint8Array, bytes2: Uint8Array): asserts bytes1 {
-    if (Oblivious.Sodium.compare(bytes1, bytes2) !== 0) {
-        throw new Error('Assertion failed: the byte arrays are not equal.');
-    }
-}
-
-function assertRaise(expected_err: string, thunk): asserts expected_err {
-    try {
-        thunk();
-    } catch (err) {
-        if (err !== expected_err) {
-            throw new Error('Assertion failed: a different error was thrown than expected.');
-        }
-    }
-    throw new Error('Assertion failed: no error was thrown. ');
-}
-
 const from_hex = Oblivious.Sodium.from_hex;
 
 /**
@@ -37,12 +14,15 @@ const from_hex = Oblivious.Sodium.from_hex;
 function api_methods_oblivious() {
     return ['Sodium', 'Point', 'Scalar'];
 }
+
 function api_methods_sodium() {
     return ['scl', 'rnd', 'inv', 'smu', 'pnt', 'bas', 'mul', 'add', 'sub'];
 }
+
 function api_methods_point() {
     return ['random', 'bytes', 'hash', 'base', 'from_base64', 'mul'];
 }
+
 function api_methods_scalar() {
     return ['random', 'bytes', 'hash', 'from_base64'];
 }
@@ -51,33 +31,35 @@ function api_methods_scalar() {
  * Check that namespaces provide access to the expected
  * classes and functions.
  */
-function Test_namespace() {
-    function Test_API_Oblivious() {
-        assertTrue(Oblivious.Sodium !== null);
+beforeEach((done) => {
+    Oblivious.Sodium.ready.then(done);
+});
+
+describe('namespace tests', () => {
+    test('oblivious api has all methods', () => {
+        expect(Oblivious.Sodium).not.toBeNull();
+        const methods = Object.getOwnPropertyNames(Oblivious);
+        expect(methods).toEqual(expect.arrayContaining(api_methods_oblivious()))
+    });
+
+    test('sodium api has all methods', () => {
+        expect(Oblivious.Sodium).not.toBeNull();
         const methods = Object.getOwnPropertyNames(Oblivious.Sodium);
-        api_methods_oblivious().every(val => methods.includes(val));
-    }
-    function Test_API_Sodium() {
-        assertTrue(Oblivious.Sodium !== null);
-        const methods = Object.getOwnPropertyNames(Oblivious.Sodium);
-        api_methods_sodium().every(val => methods.includes(val));
-    }
-    function Test_API_Point() {
-        assertTrue(Oblivious.Point !== null);
-        const p = new Oblivious.Point(null);
-        assertTrue(typeof p.mul === 'function');
+        expect(methods).toEqual(expect.arrayContaining(api_methods_sodium()))
+    });
+
+    test('point api has all methods', () => {
+        expect(Oblivious.Sodium).not.toBeNull();
         const methods = Object.getOwnPropertyNames(Oblivious.Point);
-        api_methods_point().every(val => methods.includes(val));
-    }
-    function Test_API_Scalar() {
-        assertTrue(Oblivious.Scalar !== null);
-        const s = new Oblivious.Scalar(null);
-        assertTrue(typeof s.mul === 'function');
+        expect(methods).toEqual(expect.arrayContaining(api_methods_point()))
+    });
+
+    test('scalar api has all methods', () => {
+        expect(Oblivious.Sodium).not.toBeNull();
         const methods = Object.getOwnPropertyNames(Oblivious.Scalar);
-        api_methods_scalar().every(val => methods.includes(val));
-    }
-    return { Test_API_Oblivious, Test_API_Sodium, Test_API_Point, Test_API_Scalar };
-}
+        expect(methods).toEqual(expect.arrayContaining(api_methods_scalar()))
+    });
+});
 
 /**
  * This function does either of two things depending on `bits`:
@@ -104,154 +86,168 @@ function check_or_generate_operation(/*test, */fun, lengths: number[], bits: Uin
 /**
  * Direct tests of primitive operators that operate on bytes-like objects.
  */
-function Test_primitives() {
-    function test_rnd() {
-        for (let _:number = 0; _ < 256; _++) {
+describe('primitive tests', () => {
+    test('rnd', () => {
+        for (let _: number = 0; _ < 256; _++) {
             const s = Oblivious.Sodium.rnd();
-            assertTrue(s.length === 32 && Oblivious.Sodium.scl(s) !== null);
+            expect(s.length).toEqual(32);
+            expect(Oblivious.Sodium.scl(s)).not.toBeNull();
         }
-    }
+    });
 
-    function test_scl_none() {
-        for (let _:number = 0; _ < 256; _++) {
+    test('scl none', () => {
+        for (let _: number = 0; _ < 256; _++) {
             const s = Oblivious.Sodium.scl(null);
-            assertTrue(s.length === 32 && Oblivious.Sodium.scl(s) !== null);
+            expect(s.length).toEqual(32);
+            expect(Oblivious.Sodium.scl(s)).not.toBeNull();
         }
-    }
+    });
 
-    function test_scl(bits) {
+    test.skip('scl', () => {
         const bitsDefault = from_hex('4df8fe738c097afa7f255b10c3ab118eeb73e38935605042ccb7581c73f1e5e9');
-        function fun(bs) {
-            return new Uint8Array([ Oblivious.Sodium.scl(bs) !== null ? 1 : 0 ]);
-        }
-        return check_or_generate_operation(fun, [32], bits ?? bitsDefault);
-    }
 
-    function test_inv(bits) {
+        function fun(bs) {
+            return new Uint8Array([Oblivious.Sodium.scl(bs) !== null ? 1 : 0]);
+        }
+
+        expect(check_or_generate_operation(fun, [32], bitsDefault)).toEqual(bitsDefault);
+    });
+
+    test.skip('inv', () => {
         const bitsDefault = from_hex('41c07230000960b274044a0080a8018aa0114380150000028c2700006081e1e1');
-        function fun(bs) {
-            const s = Oblivious.Sodium.scl (bs);
-            return (s !== null ? Oblivious.Sodium.inv (s) : new Uint8Array([0]));
-        }
-        return check_or_generate_operation(fun, [32], bits ?? bitsDefault);
-    }
 
-    function test_smu(bits) {
+        function fun(bs) {
+            const s = Oblivious.Sodium.scl(bs);
+            return (s !== null ? Oblivious.Sodium.inv(s) : new Uint8Array([0]));
+        }
+
+        return check_or_generate_operation(fun, [32], bitsDefault);
+    });
+
+    test.skip('smu', () => {
         const bitsDefault = from_hex('2ca120487000010295804000850254008018000000008000080100008400000c' +
             '2ca120487000010295804000850254008018000000008000080100008400000c');
+
         function fun(bs) {
             const s1 = Oblivious.Sodium.scl(bs.slice(0, 32));
             const s2 = Oblivious.Sodium.scl(bs.slice(32));
             return (s1 !== null && s2 !== null ? Oblivious.Sodium.smu(s1, s2) : new Uint8Array([0]));
         }
-        return check_or_generate_operation(fun, [32, 32], bits ?? bitsDefault);
-    }
 
-    function test_pnt_null() {
-        for (let _:number = 0; _ < 256; _++) {
-            assertTrue(Oblivious.Sodium.pnt(null).length === 32);
+        return check_or_generate_operation(fun, [32, 32], bitsDefault);
+    });
+
+    test('pnt null', () => {
+        for (let _: number = 0; _ < 256; _++) {
+            expect(Oblivious.Sodium.pnt(null).length).toEqual(32);
         }
-    }
+    });
 
-    function test_pnt(bits) {
+    test.skip('pnt', () => {
         const bitsDefault = from_hex('baf12de24e54deae0aa116816bf5eee23b1168c78e892372e08a9884de9d4c1b');
-        return check_or_generate_operation(Oblivious.Sodium.pnt, [64], bits ?? bitsDefault);
-    }
+        return check_or_generate_operation(Oblivious.Sodium.pnt, [64], bitsDefault);
+    });
 
-    function test_bas(bits) {
+    test.skip('bas', () => {
         const bitsDefault = from_hex('00386671840148d05620421002a2110aa800e289010040404cb2101c20e165a0');
-        function fun(bs) {
-            const s = Oblivious.Sodium.scl (bs);
-            return (s !== null ? Oblivious.Sodium.bas (s) : new Uint8Array([0]));
-        }
-        return check_or_generate_operation(fun, [32], bits ?? bitsDefault);
-    }
 
-    function test_mul(bits) {
+        function fun(bs) {
+            const s = Oblivious.Sodium.scl(bs);
+            return (s !== null ? Oblivious.Sodium.bas(s) : new Uint8Array([0]));
+        }
+
+        return check_or_generate_operation(fun, [32], bitsDefault);
+    });
+
+    test.skip('mul', () => {
         const bitsDefault = from_hex('2c040004500080008180400080000008a1180020001080080211004000080040' +
             '2c040004500080008180400080000008a1180020001080080211004000080040');
+
         function fun(bs) {
             const s1 = Oblivious.Sodium.scl(bs.slice(0, 32));
             const s2 = Oblivious.Sodium.scl(bs.slice(32));
             return (s1 !== null && s2 !== null ? Oblivious.Sodium.mul(s2, Oblivious.Sodium.bas(s1)) : new Uint8Array([0]));
         }
-        return check_or_generate_operation(fun, [32, 32], bits ?? bitsDefault);
-    }
 
-    function test_add(bits) {
+        return check_or_generate_operation(fun, [32, 32], bitsDefault);
+    });
+
+    test.skip('add', () => {
         const bitsDefault = from_hex('28400040500000008480000020024c00211800080000800002110040ac001044' +
             '28400040500000008480000020024c00211800080000800002110040ac001044');
+
         function fun(bs) {
             const s1 = Oblivious.Sodium.scl(bs.slice(0, 32));
             const s2 = Oblivious.Sodium.scl(bs.slice(32));
             return (s1 !== null && s2 !== null ? Oblivious.Sodium.add(Oblivious.Sodium.bas(s1), Oblivious.Sodium.bas(s2)) : new Uint8Array([0]));
         }
-        return check_or_generate_operation(fun, [32, 32], bits ?? bitsDefault);
-    }
 
-    function test_sub(bits) {
+        return check_or_generate_operation(fun, [32, 32], bitsDefault);
+    });
+
+    test.skip('sub', () => {
         const bitsDefault = from_hex('24210008500080028000000025020c08000001200000800002008002ac081040' +
             '24210008500080028000000025020c08000001200000800002008002ac081040');
+
         function fun(bs) {
             const s1 = Oblivious.Sodium.scl(bs.slice(0, 32));
             const s2 = Oblivious.Sodium.scl(bs.slice(32));
             return (s1 !== null && s2 !== null ? Oblivious.Sodium.sub(Oblivious.Sodium.bas(s1), Oblivious.Sodium.bas(s2)) : new Uint8Array([0]));
         }
-        return check_or_generate_operation(fun, [32, 32], bits ?? bitsDefault);
-    }
 
-    return {
-        test_rnd, test_scl_none, test_scl, test_inv, test_smu,
-        test_pnt_none: test_pnt_null, test_pnt, test_mul, test_add, test_sub
-    };
-}
+        return check_or_generate_operation(fun, [32, 32], bitsDefault);
+    });
+})
 
 /**
  * Tests of point and scalar wrapper classes and their methods.
  */
-function Test_classes() {
-    function test_point_random() {
+describe('classes tests', () => {
+    test('point random', () => {
         for (let _: number = 0; _ < 256; _++) {
-            assertTrue(Oblivious.Point.random().length === 32);
+            expect(Oblivious.Point.random().length).toEqual(32);
         }
-    }
+    });
 
-    function test_point_bytes(bits) {
+    test.skip('point bytes', () => {
         const bitsDefault = from_hex('baf12de24e54deae0aa116816bf5eee23b1168c78e892372e08a9884de9d4c1b');
-        return check_or_generate_operation(Oblivious.Point.bytes, [64], bits ?? bitsDefault);
-    }
+        return check_or_generate_operation(Oblivious.Point.bytes, [64], bitsDefault);
+    });
 
-    function test_point_hash(bits) {
+    test.skip('point hash', () => {
         const bitsDefault = from_hex('10cb044c737b034d5755f8ba0e29432745ed4fb1a78ea22a15b2d1113492841b');
-        return check_or_generate_operation(Oblivious.Point.hash, [64], bits ?? bitsDefault);
-    }
+        return check_or_generate_operation(Oblivious.Point.hash, [64], bitsDefault);
+    });
 
-    function test_point_base(bits) {
+    test.skip('point base', () => {
         const bitsDefault = from_hex('00386671840148d05620421002a2110aa800e289010040404cb2101c20e165a0');
+
         function fun(bs) {
             const s = Oblivious.Scalar.bytes(bs);
             return (s !== null ? Oblivious.Point.base(s) : new Uint8Array([0]));
         }
-        return check_or_generate_operation(fun, [32], bits ?? bitsDefault);
-    }
 
-    function test_point_base64() {
+        return check_or_generate_operation(fun, [32], bitsDefault);
+    });
+
+    test('point base64', () => {
         for (let _: number = 0; _ < 256; _++) {
             const p = new Oblivious.Point(null);
             const pBase64 = p.to_base64();
-            assertEqual(Oblivious.Point.from_base64(pBase64), p);
+            expect(Oblivious.Sodium.compare(Oblivious.Point.from_base64(pBase64), p)).toEqual(0);
         }
-    }
+    });
 
-    function test_point() {
-        for (let _:number = 0; _ < 256; _++) {
-            assertTrue((new Oblivious.Point(null)).length === 32);
+    test('point', () => {
+        for (let _: number = 0; _ < 256; _++) {
+            expect((new Oblivious.Point(null)).length).toEqual(32);
         }
-    }
+    });
 
-    function test_point_rmul(bits) {
+    test.skip('point rmul', () => {
         const bitsDefault = from_hex('2c040004500080008180400080000008a1180020001080080211004000080040' +
             '2c040004500080008180400080000008a1180020001080080211004000080040');
+
         function fun(bs) {
             const s1 = Oblivious.Scalar.bytes(bs.slice(0, 32));
             const s2 = Oblivious.Scalar.bytes(bs.slice(32));
@@ -261,12 +257,14 @@ function Test_classes() {
                     : new Uint8Array([0])
             );
         }
-        return check_or_generate_operation(fun, [32, 32], bits ?? bitsDefault);
-    }
 
-    function test_point_scalar_mul_op(bits) {
+        return check_or_generate_operation(fun, [32, 32], bitsDefault);
+    });
+
+    test.skip('point scalar mul op', () => {
         const bitsDefault = from_hex('2c040004500080008180400080000008a1180020001080080211004000080040' +
             '2c040004500080008180400080000008a1180020001080080211004000080040');
+
         function fun(bs) {
             const s1 = Oblivious.Scalar.bytes(bs.slice(0, 32));
             const s2 = Oblivious.Scalar.bytes(bs.slice(32));
@@ -276,27 +274,31 @@ function Test_classes() {
                     : new Uint8Array([0])
             );
         }
-        return check_or_generate_operation(fun, [32, 32], bits ?? bitsDefault);
-    }
 
-    function test_point_add(bits) {
+        return check_or_generate_operation(fun, [32, 32], bitsDefault);
+    });
+
+    test.skip('point add', () => {
         const bitsDefault = from_hex('28400040500000008480000020024c00211800080000800002110040ac001044' +
             '28400040500000008480000020024c00211800080000800002110040ac001044');
+
         function fun(bs) {
-            const s1 = Oblivious.Scalar.bytes (bs.slice(0, 32));
-            const s2 = Oblivious.Scalar.bytes (bs.slice(32));
+            const s1 = Oblivious.Scalar.bytes(bs.slice(0, 32));
+            const s2 = Oblivious.Scalar.bytes(bs.slice(32));
             return (
                 s1 !== null && s2 !== null
                     ? Oblivious.Point.base(s1).add(Oblivious.Point.base(s2))
                     : new Uint8Array([0])
             );
         }
-        return check_or_generate_operation(fun, [32, 32], bits ?? bitsDefault);
-    }
 
-    function test_point_sub(bits) {
+        return check_or_generate_operation(fun, [32, 32], bitsDefault);
+    });
+
+    test.skip('point sub', () => {
         const bitsDefault = from_hex('24210008500080028000000025020c08000001200000800002008002ac081040' +
             '24210008500080028000000025020c08000001200000800002008002ac081040');
+
         function fun(bs) {
             const s1 = Oblivious.Scalar.bytes(bs.slice(0, 32));
             const s2 = Oblivious.Scalar.bytes(bs.slice(32));
@@ -306,327 +308,299 @@ function Test_classes() {
                     : new Uint8Array([0])
             );
         }
-        return check_or_generate_operation(fun, [32, 32], bits ?? bitsDefault);
-    }
 
-    function test_scalar_random() {
-        for (let _:number = 0; _ < 256; _++) {
+        return check_or_generate_operation(fun, [32, 32], bitsDefault);
+    });
+
+    test('scalar random', () => {
+        for (let _: number = 0; _ < 256; _++) {
             const s = Oblivious.Scalar.random();
-            assertTrue(s.length === 32 && Oblivious.Scalar.bytes(s) !== null);
+            expect(s.length).toEqual(32);
+            expect(Oblivious.Scalar.bytes(s)).not.toBeNull();
         }
-    }
+    });
 
-    function test_scalar_bytes(bits) {
+    test.skip('test_scalar_bytes(bits)', () => {
         const bitsDefault = from_hex('4df8fe738c097afa7f255b10c3ab118eeb73e38935605042ccb7581c73f1e5e9');
+
         function fun(bs) {
             const s = Oblivious.Scalar.bytes(bs);
             return new Uint8Array([
                 s !== null ? 1 : 0
             ]);
         }
-        return check_or_generate_operation(fun, [32], bits ?? bitsDefault);
-    }
 
-    function test_scalar_hash(bits) {
+        return check_or_generate_operation(fun, [32], bitsDefault);
+    });
+
+    test.skip('scalar hash', () => {
         const bitsDefault = from_hex('09991cc13ab3799d9c05e0c75968859298977fb7b78efa2dcb6e1689e927ac0e');
-        return check_or_generate_operation(Oblivious.Scalar.hash, [32], bits ?? bitsDefault);
-    }
+        return check_or_generate_operation(Oblivious.Scalar.hash, [32], bitsDefault);
+    });
 
-    function test_scalar_base64() {
-        for (let _:number = 0; _ < 256; _++) {
+    test('scalar base64', () => {
+        for (let _: number = 0; _ < 256; _++) {
             const s = new Oblivious.Scalar(null);
             const sBase64 = s.to_base64();
-            assertEqual(Oblivious.Scalar.from_base64(sBase64), s);
+            expect(Oblivious.Sodium.compare(Oblivious.Scalar.from_base64(sBase64), s)).toEqual(0);
         }
-    }
+    });
 
-    function test_scalar() {
-        for (let _:number = 0; _ < 256; _++) {
+    test('scalar', () => {
+        for (let _: number = 0; _ < 256; _++) {
             const s = new Oblivious.Scalar(null);
-            assertTrue(s.length === 32 && Oblivious.Scalar.bytes(s) !== null);
+            expect(s.length).toEqual(32)
+            expect(Oblivious.Scalar.bytes(s)).not.toBeNull();
         }
-    }
+    });
 
-    function test_scalar_inverse(bits) {
+    test.skip('scalar inverse', () => {
         const bitsDefault = from_hex('41c07230000960b274044a0080a8018aa0114380150000028c2700006081e1e1');
+
         function fun(bs) {
-            const s = Oblivious.Scalar.bytes (bs);
-            return (s !== null ? s.inverse () : new Uint8Array([0]));
+            const s = Oblivious.Scalar.bytes(bs);
+            return (s !== null ? s.inverse() : new Uint8Array([0]));
         }
-        return check_or_generate_operation(fun, [32], bits ?? bitsDefault);
-    }
 
-    function test_scalar_invert_op(bits) {
+        return check_or_generate_operation(fun, [32], bitsDefault);
+    });
+
+    test.skip('scalar invert op', () => {
         const bitsDefault = from_hex('41c07230000960b274044a0080a8018aa0114380150000028c2700006081e1e1');
+
         function fun(bs) {
             const s = Oblivious.Scalar.bytes(bs);
             return (s !== null ? s.invert() : new Uint8Array([0]));
         }
-        return check_or_generate_operation(fun, [32], bits ?? bitsDefault);
-    }
 
-    function test_scalar_mul(bits) {
+        return check_or_generate_operation(fun, [32], bitsDefault);
+    });
+
+    test.skip('scalar mul', () => {
         const bitsDefault = from_hex('2ca120487000010295804000850254008018000000008000080100008400000c' +
             '2ca120487000010295804000850254008018000000008000080100008400000c');
+
         function fun(bs) {
             const s1 = Oblivious.Scalar.bytes(bs.slice(0, 32));
             const s2 = Oblivious.Scalar.bytes(bs.slice(32));
             return (s1 !== null && s2 !== null ? s1.mul(s2) : new Uint8Array([0]));
         }
-        return check_or_generate_operation(fun, [32, 32], bits ?? bitsDefault);
-    }
 
-    return {
-        test_point_random, test_point_bytes, test_point_hash, test_point_base, test_point_base64, test_point,
-        test_point_rmul, test_point_scalar_mul_op, test_point_add, test_point_sub, test_scalar_random, test_scalar_bytes,
-        test_scalar_hash, test_scalar_base64, test_scalar, test_scalar_inverse, test_scalar_invert_op, test_scalar_mul
-    }
-}
+        return check_or_generate_operation(fun, [32, 32], bitsDefault);
+    });
+});
 
 /**
  * Tests verifying that methods return objects of the appropriate type.
  */
-function Test_types() {
-    function test_types_point_random() {
+describe('types tests', () => {
+    test('types point random', () => {
         const p = Oblivious.Point.random();
-        assertTrue(p instanceof Oblivious.Point);
-    }
+        expect(p).toBeInstanceOf(Oblivious.Point);
+    });
 
-    function test_types_point_bytes() {
+    test('types point bytes', () => {
         // const bs = fountains(64, {limit: 1});
         const bs = (r => new Uint8Array([
             ...r(), ...r()
         ]))(Oblivious.Sodium.rnd);  // 64 bits in length
         const p = Oblivious.Point.bytes(bs);
-        assertTrue(p instanceof Oblivious.Point);
-    }
+        expect(p).toBeInstanceOf(Oblivious.Point);
+    });
 
-    function test_types_point_hash() {
+    test('types point hash', () => {
         // const bs = fountains(64, {limit: 1});
         const bs = (r => new Uint8Array([
             ...r(), ...r()
         ]))(Oblivious.Sodium.rnd);  // 64 bits in length
         const p = Oblivious.Point.hash(bs);
-        assertTrue(p instanceof Oblivious.Point);
-    }
+        expect(p).toBeInstanceOf(Oblivious.Point);
+    });
 
-    function test_types_point_base() {
+    test('types point base', () => {
         const p = Oblivious.Point.base(Oblivious.Scalar.random());
-        assertTrue(p instanceof Oblivious.Point);
-    }
+        expect(p).toBeInstanceOf(Oblivious.Point);
+    });
 
-    function test_types_point_mul() {
+    test('types point mul', () => {
         // const bs = fountains(32 + 64, {limit: 1});
         const bs = (r => new Uint8Array([
-                ...r(), ...[...r(), ...r()]
-            ]))(Oblivious.Sodium.rnd);  // 32 + 64 bits in length
+            ...r(), ...[...r(), ...r()]
+        ]))(Oblivious.Sodium.rnd);  // 32 + 64 bits in length
         const p = Oblivious.Point.hash(bs.slice(0, 32));
         const s = Oblivious.Scalar.hash(bs.slice(64));
-        assertTrue(p.mul(s) instanceof Oblivious.Point);
-    }
+        expect(p.mul(s)).toBeInstanceOf(Oblivious.Point);
+    });
 
-    function test_types_point_add() {
+    test('types point add', () => {
         // const bs = fountains(64 + 64, {limit: 1});
         const bs = (r => new Uint8Array([
             ...[...r(), ...r()], ...[...r(), ...r()]
         ]))(Oblivious.Sodium.rnd);  // 64 + 64 bits in length
         const p = Oblivious.Point.hash(bs.slice(0, 64));
         const q = Oblivious.Point.hash(bs.slice(64));
-        assertTrue(p.add(q) instanceof Oblivious.Point);
-    }
+        expect(p.add(q)).toBeInstanceOf(Oblivious.Point);
+    });
 
-    function test_types_point_sub() {
+    test('types point sub', () => {
         // const bs = fountains(64 + 64, {limit: 1});
         const bs = (r => new Uint8Array([
             ...[...r(), ...r()], ...[...r(), ...r()]
         ]))(Oblivious.Sodium.rnd);  // 64 + 64 bits in length
         const p = Oblivious.Point.hash(bs.slice(0, 64));
         const q = Oblivious.Point.hash(bs.slice(64));
-        assertTrue(p.sub(q) instanceof Oblivious.Point);
-    }
+        expect(p.sub(q)).toBeInstanceOf(Oblivious.Point);
+    });
 
-    function test_types_scalar_random() {
-        assertTrue(Oblivious.Scalar.random() instanceof Oblivious.Scalar);
-    }
+    test('types scalar random', () => {
+        expect(Oblivious.Scalar.random()).toBeInstanceOf(Oblivious.Scalar);
+    });
 
-    function test_types_scalar_bytes() {
+    test('types scalar bytes', () => {
         const bs = new Uint8Array(Oblivious.Scalar.random());
-        assertTrue(Oblivious.Scalar.bytes(bs) instanceof Oblivious.Scalar);
-    }
+        expect(Oblivious.Scalar.bytes(bs)).toBeInstanceOf(Oblivious.Scalar);
+    });
 
-    function test_types_scalar_hash() {
+    test('types scalar hash', () => {
         // const bs = fountains(32, {limit: 1});
         const bs = (r => new Uint8Array([
             ...r()
         ]))(Oblivious.Sodium.rnd);  // 32 bits in length
-        assertTrue(Oblivious.Scalar.hash(bs) instanceof Oblivious.Scalar);
-    }
+        expect(Oblivious.Scalar.hash(bs)).toBeInstanceOf(Oblivious.Scalar);
+    });
 
-    function test_types_scalar_invert() {
-        assertTrue(Oblivious.Scalar.random().invert() instanceof Oblivious.Scalar);
-    }
+    test('types scalar invert', () => {
+        expect(Oblivious.Scalar.random().invert()).toBeInstanceOf(Oblivious.Scalar);
+    });
 
-    function test_types_scalar_inverse() {
-        assertTrue(Oblivious.Scalar.random().inverse() instanceof Oblivious.Scalar);
-    }
+    test('types scalar inverse', () => {
+        expect(Oblivious.Scalar.random().inverse()).toBeInstanceOf(Oblivious.Scalar);
+    });
 
-    function test_types_scalar_mul_scalar() {
+    test('types scalar mul scalar', () => {
         const s0 = Oblivious.Scalar.random();
         const s1 = Oblivious.Scalar.random();
-        assertTrue(s0.mul(s1) instanceof Oblivious.Scalar);
-    }
+        expect(s0.mul(s1)).toBeInstanceOf(Oblivious.Scalar);
+    });
 
-    function test_types_scalar_mul_point() {
+    test('types scalar mul point', () => {
         // const bs = fountains(32 + 64, {limit: 1});
         const bs = (r => new Uint8Array([
             ...r(), ...[...r(), ...r()]
         ]))(Oblivious.Sodium.rnd);  // 32 + 64 bits in length
         const s = Oblivious.Scalar.hash(bs.slice(0, 32));
         const p = Oblivious.Point.hash(bs.slice(64));
-        assertTrue(s.mul(p) instanceof Oblivious.Point);
-    }
-
-    return {
-        test_types_point_add, test_types_point_base, test_types_point_bytes, test_types_point_hash,
-        test_types_point_mul, test_types_point_random, test_types_point_sub, test_types_scalar_bytes,
-        test_types_scalar_hash, test_types_scalar_inverse, test_types_scalar_invert,
-        test_types_scalar_mul_point, test_types_scalar_mul_scalar, test_types_scalar_random
-    };
-}
+        expect(s.mul(p)).toBeInstanceOf(Oblivious.Point);
+    });
+});
 
 /**
  * Tests of algebraic properties of primitive operators.
  */
-function Test_algebra() {
-    function test_algebra_scalar_inverse_identity() {
+describe('algebra tests', () => {
+    test('algebra scalar inverse identity', () => {
         // for (const bs of fountains (32, {limit: 256})) {
-        for (let _:number = 0; _ < 256; _++) {
+        for (let _: number = 0; _ < 256; _++) {
             const s = new Oblivious.Scalar(null);
-            assertEqual(Oblivious.Sodium.inv(Oblivious.Sodium.inv(s)), s);
+            expect(Oblivious.Sodium.compare(
+                Oblivious.Sodium.inv(Oblivious.Sodium.inv(s)),
+                s
+            )).toEqual(0);
         }
-    }
+    });
 
-    function test_algebra_scalar_inverse_mul_cancel() {
+    test('algebra scalar inverse mul cancel', () => {
         // for (const bs of fountains (32 + 64, {limit: 256})) {
-        for (let _:number = 0; _ < 256; _++) {
+        for (let _: number = 0; _ < 256; _++) {
             const s0 = new Oblivious.Scalar(null);
             const p0 = new Oblivious.Point(null);
-            assertEqual(
-                Oblivious.Sodium.mul(
-                    Oblivious.Sodium.inv(s0),
-                    Oblivious.Sodium.mul(s0, p0)
-                ),
+            expect(
+                Oblivious.Sodium.compare(
+                    Oblivious.Sodium.mul(
+                        Oblivious.Sodium.inv(s0),
+                        Oblivious.Sodium.mul(s0, p0)),
+                    p0
+                )).toEqual(0);
+        }
+    });
+
+    test('algebra scalar mul commute', () => {
+        // for (const bs of fountains ((32 + 32) + 64, {limit: 256})) {
+        for (let _: number = 0; _ < 256; _++) {
+            const s0 = new Oblivious.Scalar(null);
+            const s1 = new Oblivious.Scalar(null);
+            const p0 = new Oblivious.Point(null);
+            expect(
+                Oblivious.Sodium.mul(s0, Oblivious.Sodium.mul(s1, p0))).toEqual(
+                Oblivious.Sodium.mul(s1, Oblivious.Sodium.mul(s0, p0)));
+        }
+    });
+
+    test('algebra point add commute', () => {
+        // for (const bs of fountains (64 + 64, {limit: 256})) {
+        for (let _: number = 0; _ < 256; _++) {
+            const p0 = new Oblivious.Point(null);
+            const p1 = new Oblivious.Point(null);
+            expect(Oblivious.Sodium.add(p0, p1)).toEqual(Oblivious.Sodium.add(p1, p0));
+        }
+    });
+
+    test('algebra point add sub cancel', () => {
+        // for (const bs of fountains (64 + 64, {limit: 256})) {
+        for (let _: number = 0; _ < 256; _++) {
+            const p0 = new Oblivious.Point(null);
+            const p1 = new Oblivious.Point(null);
+            expect(Oblivious.Sodium.compare(
+                Oblivious.Sodium.add(Oblivious.Sodium.sub(p0, p1), p1),
                 p0
-            );
+            )).toEqual(0);
         }
-    }
+    });
 
-    function test_algebra_scalar_mul_commute() {
+    test('algebra scalar mul point mul associate', () => {
         // for (const bs of fountains ((32 + 32) + 64, {limit: 256})) {
-        for (let _:number = 0; _ < 256; _++) {
+        for (let _: number = 0; _ < 256; _++) {
             const s0 = new Oblivious.Scalar(null);
             const s1 = new Oblivious.Scalar(null);
             const p0 = new Oblivious.Point(null);
-            assertEqual(
-                Oblivious.Sodium.mul(s0, Oblivious.Sodium.mul(s1, p0)),
-                Oblivious.Sodium.mul(s1, Oblivious.Sodium.mul(s0, p0))
-            );
+            expect(
+                Oblivious.Sodium.mul(s0, Oblivious.Sodium.mul(s1, p0))).toEqual(
+                Oblivious.Sodium.mul(Oblivious.Sodium.smu(s0, s1), p0));
         }
-    }
+    });
 
-    function test_algebra_point_add_commute() {
-        // for (const bs of fountains (64 + 64, {limit: 256})) {
-        for (let _:number = 0; _ < 256; _++) {
-            const p0 = new Oblivious.Point(null);
-            const p1 = new Oblivious.Point(null);
-            assertEqual(Oblivious.Sodium.add(p0, p1), Oblivious.Sodium.add(p1, p0));
-        }
-    }
-
-    function test_algebra_point_add_sub_cancel() {
-        // for (const bs of fountains (64 + 64, {limit: 256})) {
-        for (let _:number = 0; _ < 256; _++) {
-            const p0 = new Oblivious.Point(null);
-            const p1 = new Oblivious.Point(null);
-            assertEqual(Oblivious.Sodium.add(Oblivious.Sodium.sub(p0, p1), p1), p0);
-        }
-    }
-
-    function test_algebra_scalar_mul_point_mul_associate() {
-        // for (const bs of fountains ((32 + 32) + 64, {limit: 256})) {
-        for (let _:number = 0; _ < 256; _++) {
-            const s0 = new Oblivious.Scalar(null);
-            const s1 = new Oblivious.Scalar(null);
-            const p0 = new Oblivious.Point(null);
-            assertEqual(
-                Oblivious.Sodium.mul(s0, Oblivious.Sodium.mul(s1, p0)),
-                Oblivious.Sodium.mul(Oblivious.Sodium.smu(s0, s1), p0)
-            );
-        }
-    }
-
-    function test_algebra_scalar_mul_point_add_distribute() {
+    test('algebra scalar mul point add distribute', () => {
         // for (const bs of fountains ((32 + 64) + 64, {limit: 256})) {
-        for (let _:number = 0; _ < 256; _++) {
+        for (let _: number = 0; _ < 256; _++) {
             const s0 = new Oblivious.Scalar(null);
             const p0 = new Oblivious.Point(null);
             const p1 = new Oblivious.Point(null);
-            assertEqual(
+            expect(
                 Oblivious.Sodium.add(
                     Oblivious.Sodium.mul(s0, p0),
                     Oblivious.Sodium.mul(s0, p1)
-                ),
+                )).toEqual(
                 Oblivious.Sodium.mul(
                     s0,
                     Oblivious.Sodium.add(p0, p1)
-                )
-            );
+                ));
         }
-    }
+    });
 
     // This is not possible in TypeScript by design.
-    function test_algebra_scalar_mul_scalar_on_left_hand_side_of_non_scalar() {
+    test('algebra scalar mul scalar on left hand side of non scalar', () => {
         // const s = Oblivious.Scalar.random();
         // assertRaises('TypeError', function () {
         //     return s.mul(new Uint8Array([0]) as (typeof Scalar));
         // });
-    }
+    });
 
     // This is not possible in TypeScript by design.
-    function test_algebra_scalar_mul_point_on_left_hand_side() {
+    test.skip('algebra scalar mul point on left hand side', () => {
         // const s = Oblivious.Scalar.random();
         // const p = Oblivious.Point.hash(new Uint8Array(32));
         // assertRaises('TypeError', function () {
         //     return p.mul(s);
         // });
-    }
-
-    return {
-        test_algebra_scalar_inverse_identity, test_algebra_scalar_inverse_mul_cancel,
-        test_algebra_scalar_mul_commute, test_algebra_point_add_commute,
-        test_algebra_point_add_sub_cancel, test_algebra_scalar_mul_point_mul_associate,
-        test_algebra_scalar_mul_point_add_distribute,
-        test_algebra_scalar_mul_scalar_on_left_hand_side_of_non_scalar,
-        test_algebra_scalar_mul_point_on_left_hand_side
-    };
-}
-
-function all_tests() {
-    const TestSuites = {
-        Test_namespace,
-        Test_primitives,
-        Test_classes,
-        Test_types,
-        Test_algebra
-    };
-    for (const [name, init] of Object.entries(TestSuites)) {
-        console.log('\nUnit test reference bit vectors for ' + name + ' methods...');
-        const tests = init();
-        for (const m of Object.keys(tests)) {
-            const method = tests[m];
-            console.log('* ' + m + ': ' + (r => r === undefined ? 'pass' : r)(method()));
-        }
-    }
-}
-
-Oblivious.ready.then(all_tests);
+    });
+});

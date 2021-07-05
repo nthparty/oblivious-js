@@ -5,7 +5,8 @@
   "main": "dist/oblivious.js",
   "scripts": {
     "start": "tsc && node dist/oblivious.js",
-    "test": "ts-node test/test_oblivious.js"
+    "test": "jest --coverage",
+    "coveralls": "npm t && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
@@ -30,7 +31,11 @@
   },
   "homepage": "https://github.com/nthparty/oblivious-js#readme",
   "devDependencies": {
+    "@types/jest": "^26.0.23",
+    "coveralls": "^3.1.1",
+    "jest": "^27.0.6",
     "libsodium-wrappers-sumo": "^0.7.9",
+    "ts-jest": "^27.0.3",
     "ts-node": "^10.0.0",
     "typescript": "^4.1.3"
   },
