@@ -1,6 +1,8 @@
 # oblivious-js
 JavaScript library that serves as an API for common primitives used to implement OPRF and OT protocols.
 
+[![Coverage Status](https://coveralls.io/repos/github/nthparty/oblivious-js/badge.svg?branch=main)](https://coveralls.io/github/nthparty/oblivious-js?branch=main)
+
 Purpose
 -------
 
@@ -44,7 +46,7 @@ Concise unit tests are implemented with the help of
 [fountains](https://pypi.org/project/fountains/) and new reference bit
 lists for these tests can be generated in the following way:-->
 
-    ts-node test/test_oblivious.ts
+    npm test
 
 <!--Style conventions are enforced using [Pylint](https://www.pylint.org/):
 

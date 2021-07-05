@@ -1,4 +1,4 @@
-import sodium = require('libsodium-wrappers-sumo');
+const sodium = require('libsodium-wrappers-sumo');
 
 /**
  * Wrapper class for primitive operations.
