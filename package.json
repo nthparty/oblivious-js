@@ -5,7 +5,8 @@
   "main": "dist/oblivious.js",
   "scripts": {
     "start": "tsc && node dist/oblivious.js",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",

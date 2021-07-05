@@ -18,8 +18,9 @@ jobs:
 
       - name: npm install, npm coveralls
         run: |
-          npm install
+          npm install --include=dev
           npm t
+          npm run-script lint
 
       - name: Coveralls
         uses: coverallsapp/github-action@master
