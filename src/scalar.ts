@@ -1,6 +1,6 @@
-declare const Buffer;
-import { Sodium } from "./sodium";
-import { Point } from "./point";
+declare const Buffer: any;
+import { Sodium } from './sodium';
+import { Point } from './point';
 
 /**
  * Wrapper class for a bytes-like object that corresponds
@@ -96,7 +96,7 @@ export class Scalar extends Uint8Array {
      */
     add(this: Scalar, other: Scalar): Scalar {
         return new Scalar(Sodium.sad(this, other));
-    };
+    }
 
     /**
      * Subtract supplied scalar by this scalar.
@@ -105,7 +105,7 @@ export class Scalar extends Uint8Array {
      */
     sub(this: Scalar, other: Scalar): Scalar {
         return new Scalar(Sodium.ssb(this, other));
-    };
+    }
 
     /**
      * Multiply supplied point or scalar by this scalar.
@@ -137,7 +137,7 @@ export class Scalar extends Uint8Array {
      * Convert to equivalent Base64 UTF-8 string representation.
      * @returns {string} Base64 UTF-8 string representation of the scalar.
      */
-    to_base64(this): string {
+    to_base64(this: any): string {
         return Buffer.from(this).toString('base64');
     }
 }

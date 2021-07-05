@@ -4,7 +4,7 @@
  * classes, as well as unit tests confirming algebraic relationships among primitives.
  */
 
-import { Oblivious } from "../src/oblivious";
+import { Oblivious } from '../src/oblivious';
 
 const from_hex = Oblivious.Sodium.from_hex;
 
@@ -39,25 +39,25 @@ describe('namespace tests', () => {
     test('oblivious api has all methods', () => {
         expect(Oblivious.Sodium).not.toBeNull();
         const methods = Object.getOwnPropertyNames(Oblivious);
-        expect(methods).toEqual(expect.arrayContaining(api_methods_oblivious()))
+        expect(methods).toEqual(expect.arrayContaining(api_methods_oblivious()));
     });
 
     test('sodium api has all methods', () => {
         expect(Oblivious.Sodium).not.toBeNull();
         const methods = Object.getOwnPropertyNames(Oblivious.Sodium);
-        expect(methods).toEqual(expect.arrayContaining(api_methods_sodium()))
+        expect(methods).toEqual(expect.arrayContaining(api_methods_sodium()));
     });
 
     test('point api has all methods', () => {
         expect(Oblivious.Sodium).not.toBeNull();
         const methods = Object.getOwnPropertyNames(Oblivious.Point);
-        expect(methods).toEqual(expect.arrayContaining(api_methods_point()))
+        expect(methods).toEqual(expect.arrayContaining(api_methods_point()));
     });
 
     test('scalar api has all methods', () => {
         expect(Oblivious.Sodium).not.toBeNull();
         const methods = Object.getOwnPropertyNames(Oblivious.Scalar);
-        expect(methods).toEqual(expect.arrayContaining(api_methods_scalar()))
+        expect(methods).toEqual(expect.arrayContaining(api_methods_scalar()));
     });
 });
 
@@ -88,7 +88,7 @@ function check_or_generate_operation(/*test, */fun, lengths: number[], bits: Uin
  */
 describe('primitive tests', () => {
     test('rnd', () => {
-        for (let _: number = 0; _ < 256; _++) {
+        for (let _ = 0; _ < 256; _++) {
             const s = Oblivious.Sodium.rnd();
             expect(s.length).toEqual(32);
             expect(Oblivious.Sodium.scl(s)).not.toBeNull();
@@ -96,7 +96,7 @@ describe('primitive tests', () => {
     });
 
     test('scl none', () => {
-        for (let _: number = 0; _ < 256; _++) {
+        for (let _ = 0; _ < 256; _++) {
             const s = Oblivious.Sodium.scl(null);
             expect(s.length).toEqual(32);
             expect(Oblivious.Sodium.scl(s)).not.toBeNull();
@@ -138,7 +138,7 @@ describe('primitive tests', () => {
     });
 
     test('pnt null', () => {
-        for (let _: number = 0; _ < 256; _++) {
+        for (let _ = 0; _ < 256; _++) {
             expect(Oblivious.Sodium.pnt(null).length).toEqual(32);
         }
     });
@@ -197,14 +197,14 @@ describe('primitive tests', () => {
 
         return check_or_generate_operation(fun, [32, 32], bitsDefault);
     });
-})
+});
 
 /**
  * Tests of point and scalar wrapper classes and their methods.
  */
 describe('classes tests', () => {
     test('point random', () => {
-        for (let _: number = 0; _ < 256; _++) {
+        for (let _ = 0; _ < 256; _++) {
             expect(Oblivious.Point.random().length).toEqual(32);
         }
     });
@@ -231,7 +231,7 @@ describe('classes tests', () => {
     });
 
     test('point base64', () => {
-        for (let _: number = 0; _ < 256; _++) {
+        for (let _ = 0; _ < 256; _++) {
             const p = new Oblivious.Point(null);
             const pBase64 = p.to_base64();
             expect(Oblivious.Sodium.compare(Oblivious.Point.from_base64(pBase64), p)).toEqual(0);
@@ -239,7 +239,7 @@ describe('classes tests', () => {
     });
 
     test('point', () => {
-        for (let _: number = 0; _ < 256; _++) {
+        for (let _ = 0; _ < 256; _++) {
             expect((new Oblivious.Point(null)).length).toEqual(32);
         }
     });
@@ -313,7 +313,7 @@ describe('classes tests', () => {
     });
 
     test('scalar random', () => {
-        for (let _: number = 0; _ < 256; _++) {
+        for (let _ = 0; _ < 256; _++) {
             const s = Oblivious.Scalar.random();
             expect(s.length).toEqual(32);
             expect(Oblivious.Scalar.bytes(s)).not.toBeNull();
@@ -339,7 +339,7 @@ describe('classes tests', () => {
     });
 
     test('scalar base64', () => {
-        for (let _: number = 0; _ < 256; _++) {
+        for (let _ = 0; _ < 256; _++) {
             const s = new Oblivious.Scalar(null);
             const sBase64 = s.to_base64();
             expect(Oblivious.Sodium.compare(Oblivious.Scalar.from_base64(sBase64), s)).toEqual(0);
@@ -347,9 +347,9 @@ describe('classes tests', () => {
     });
 
     test('scalar', () => {
-        for (let _: number = 0; _ < 256; _++) {
+        for (let _ = 0; _ < 256; _++) {
             const s = new Oblivious.Scalar(null);
-            expect(s.length).toEqual(32)
+            expect(s.length).toEqual(32);
             expect(Oblivious.Scalar.bytes(s)).not.toBeNull();
         }
     });
@@ -500,7 +500,7 @@ describe('types tests', () => {
 describe('algebra tests', () => {
     test('algebra scalar inverse identity', () => {
         // for (const bs of fountains (32, {limit: 256})) {
-        for (let _: number = 0; _ < 256; _++) {
+        for (let _ = 0; _ < 256; _++) {
             const s = new Oblivious.Scalar(null);
             expect(Oblivious.Sodium.compare(
                 Oblivious.Sodium.inv(Oblivious.Sodium.inv(s)),
@@ -511,7 +511,7 @@ describe('algebra tests', () => {
 
     test('algebra scalar inverse mul cancel', () => {
         // for (const bs of fountains (32 + 64, {limit: 256})) {
-        for (let _: number = 0; _ < 256; _++) {
+        for (let _ = 0; _ < 256; _++) {
             const s0 = new Oblivious.Scalar(null);
             const p0 = new Oblivious.Point(null);
             expect(
@@ -526,7 +526,7 @@ describe('algebra tests', () => {
 
     test('algebra scalar mul commute', () => {
         // for (const bs of fountains ((32 + 32) + 64, {limit: 256})) {
-        for (let _: number = 0; _ < 256; _++) {
+        for (let _ = 0; _ < 256; _++) {
             const s0 = new Oblivious.Scalar(null);
             const s1 = new Oblivious.Scalar(null);
             const p0 = new Oblivious.Point(null);
@@ -538,7 +538,7 @@ describe('algebra tests', () => {
 
     test('algebra point add commute', () => {
         // for (const bs of fountains (64 + 64, {limit: 256})) {
-        for (let _: number = 0; _ < 256; _++) {
+        for (let _ = 0; _ < 256; _++) {
             const p0 = new Oblivious.Point(null);
             const p1 = new Oblivious.Point(null);
             expect(Oblivious.Sodium.add(p0, p1)).toEqual(Oblivious.Sodium.add(p1, p0));
@@ -547,7 +547,7 @@ describe('algebra tests', () => {
 
     test('algebra point add sub cancel', () => {
         // for (const bs of fountains (64 + 64, {limit: 256})) {
-        for (let _: number = 0; _ < 256; _++) {
+        for (let _ = 0; _ < 256; _++) {
             const p0 = new Oblivious.Point(null);
             const p1 = new Oblivious.Point(null);
             expect(Oblivious.Sodium.compare(
@@ -559,7 +559,7 @@ describe('algebra tests', () => {
 
     test('algebra scalar mul point mul associate', () => {
         // for (const bs of fountains ((32 + 32) + 64, {limit: 256})) {
-        for (let _: number = 0; _ < 256; _++) {
+        for (let _ = 0; _ < 256; _++) {
             const s0 = new Oblivious.Scalar(null);
             const s1 = new Oblivious.Scalar(null);
             const p0 = new Oblivious.Point(null);
@@ -571,7 +571,7 @@ describe('algebra tests', () => {
 
     test('algebra scalar mul point add distribute', () => {
         // for (const bs of fountains ((32 + 64) + 64, {limit: 256})) {
-        for (let _: number = 0; _ < 256; _++) {
+        for (let _ = 0; _ < 256; _++) {
             const s0 = new Oblivious.Scalar(null);
             const p0 = new Oblivious.Point(null);
             const p1 = new Oblivious.Point(null);

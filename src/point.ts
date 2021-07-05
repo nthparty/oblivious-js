@@ -1,6 +1,6 @@
-declare const Buffer;
-import { Sodium } from "./sodium";
-import { Scalar } from "./scalar";
+declare const Buffer: any;
+import { Sodium } from './sodium';
+import { Scalar } from './scalar';
 
 /**
  * Wrapper class for a bytes-like object that corresponds

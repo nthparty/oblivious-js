@@ -46,7 +46,7 @@ Concise unit tests are implemented with the help of
 [fountains](https://pypi.org/project/fountains/) and new reference bit
 lists for these tests can be generated in the following way:-->
 
-    ts-node test/test_oblivious.ts
+    npm test
 
 <!--Style conventions are enforced using [Pylint](https://www.pylint.org/):
 
