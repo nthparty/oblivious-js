@@ -1,9 +1,10 @@
-const sodium = require('libsodium-wrappers-sumo');
-
 /**
  * Wrapper class for primitive operations.
  */
-export class Sodium {
+export function Sodium_init(sodium) { return class Sodium extends Uint8Array{
+    constructor(bs: Uint8Array) {
+        super(bs);
+    }
 
     /**
      * Return random non-zero scalar.
@@ -167,4 +168,4 @@ export class Sodium {
 
     // Promise will be resolved when the sodium library is finished initializing.
     static ready: Promise<void> = sodium.ready;
-}
+}; }

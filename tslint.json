@@ -4,6 +4,14 @@
   "jsRules": {},
   "rules": {
     "no-console": false,
+    "variable-name": {
+      "options": [
+        "allow-leading-underscore",
+        "allow-pascal-case",
+        "allow-snake-case",
+        "allow-trailing-underscore"
+      ]
+    }
   },
   "rulesDirectory": []
 }
