@@ -26,7 +26,8 @@ const config = {
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
-    },
+        fallback: { crypto: false, path: false }
+    }
 };
 
 // Bundle configuration: this includes both Oblivious and libsodium
