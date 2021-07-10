@@ -1,6 +1,6 @@
 {
   "name": "@nthparty/oblivious",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "JavaScript library that serves as an API for common primitives used to implement OPRF and OT protocols.",
   "main": "dist/oblivious.js",
   "scripts": {
@@ -24,6 +24,11 @@
       "name": "Andrei Lapets",
       "email": "andrei@nthparty.com",
       "url": "nthparty.com"
+    },
+    {
+      "name": "Frederick Jansen",
+      "email": "frederick@nthparty.com",
+      "url": "nthparty.com"
     }
   ],
   "license": "MIT",
@@ -33,7 +38,7 @@
   "homepage": "https://github.com/nthparty/oblivious-js#readme",
   "devDependencies": {
     "@types/jest": "^26.0.23",
-    "@types/node": "^13.7.1",
+    "@types/node": "16.0.0",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
     "@webpack-cli/generators": "^2.2.0",

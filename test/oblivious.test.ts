@@ -471,6 +471,7 @@ describe('types tests', () => {
 
     test('types scalar invert', () => {
         expect(Oblivious.Scalar.random().invert()).toBeInstanceOf(Oblivious.Scalar);
+        expect(Oblivious.Scalar.random().inverse()).toBeInstanceOf(Oblivious.Scalar);
     });
 
     test('types scalar inverse', () => {

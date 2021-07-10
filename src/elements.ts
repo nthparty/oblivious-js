@@ -1,7 +1,9 @@
-declare const Buffer: any;
 // tslint:disable:max-classes-per-file
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const Buffer: any;
 
-export function Elements_init(Sodium) {// 'Point': typeof Point, 'Scalar': typeof Scalar } {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/explicit-module-boundary-types
+export function Elements_init(Sodium: any): {'Point': any, 'Scalar': any } {
     /**
      * Wrapper class for a bytes-like object that corresponds
      * to a point.
@@ -72,6 +74,7 @@ export function Elements_init(Sodium) {// 'Point': typeof Point, 'Scalar': typeo
          * @param {Scalar} _other Ristretto255 scalar object.
          * @returns {Point} Ristretto255 point object placeholder (method throws error).
          */
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         static mul(_this: Point, _other: Scalar): Point {
             throw TypeError('point must be on right-hand side of multiplication operator');
         }
@@ -229,9 +232,9 @@ export function Elements_init(Sodium) {// 'Point': typeof Point, 'Scalar': typeo
          * @param {Scalar} other Ristretto255 scalar object.
          * @returns {Scalar} (Method throws error.)
          */
-        mul(this: Point, other: Scalar): Scalar
+        mul(this: Point, other: Scalar): Scalar;
 
-        mul(this: any, other: any): any {
+        mul(this: Point | Scalar, other: Point | Scalar): Point | Scalar {
             if (this instanceof Point) {
                 throw TypeError('scalar must be on left-hand side of multiplication operator');
             }
@@ -247,7 +250,7 @@ export function Elements_init(Sodium) {// 'Point': typeof Point, 'Scalar': typeo
          * Convert to equivalent Base64 UTF-8 string representation.
          * @returns {string} Base64 UTF-8 string representation of the scalar.
          */
-        to_base64(this: any): string {
+        to_base64(this: Scalar): string {
             return Buffer.from(this).toString('base64');
         }
     }

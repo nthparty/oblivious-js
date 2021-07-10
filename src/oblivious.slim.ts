@@ -1,7 +1,8 @@
 import { Sodium_init } from './sodium';
 import { Elements_init } from './elements';
 
-export function ObliviousSlim(sodium) {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-explicit-any
+export function ObliviousSlim(sodium: any): any {
     const Sodium = Sodium_init(sodium);
     const { Point, Scalar } = Elements_init(Sodium);
 

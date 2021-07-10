@@ -1,7 +1,9 @@
 /**
  * Wrapper class for primitive operations.
  */
-export function Sodium_init(sodium) { return class Sodium extends Uint8Array{
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-explicit-any
+export function Sodium_init(sodium: any): any { return class Sodium extends Uint8Array{
     constructor(bs: Uint8Array) {
         super(bs);
     }
