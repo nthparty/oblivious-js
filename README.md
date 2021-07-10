@@ -1,7 +1,9 @@
 # oblivious-js
-JavaScript library that serves as an API for common primitives used to implement OPRF and OT protocols.
-
+[![npm version](https://badge.fury.io/js/%40nthparty%2Foblivious.svg)](https://www.npmjs.com/package/@nthparty/oblivious)
+[![GitHub Actions Status](https://github.com/nthparty/oblivious-js/workflows/Test%20Coveralls/badge.svg)](https://github.com/nthparty/oblivious-js/actions)
 [![Coverage Status](https://coveralls.io/repos/github/nthparty/oblivious-js/badge.svg?branch=main)](https://coveralls.io/github/nthparty/oblivious-js?branch=main)
+
+JavaScript library that serves as an API for common primitives used to implement OPRF and OT protocols.
 
 Purpose
 -------
