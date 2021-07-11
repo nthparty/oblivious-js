@@ -37,7 +37,8 @@ const bundle = Object.assign({
         filename: 'oblivious.js',
         path: path.resolve(__dirname, 'dist'),
         library: 'Oblivious',
-        libraryTarget: 'var'
+        libraryTarget: 'var',
+        libraryExport: 'Oblivious' // Expose ObliviousSlim module so we don't have to access Oblivious.Oblivious
     }
 }, config);
 
@@ -49,7 +50,7 @@ const slim = Object.assign({
         path: path.resolve(__dirname, 'dist'),
         library: 'Oblivious',
         libraryTarget: 'var',
-        libraryExport: 'ObliviousSlim' // Expose ObliviousSlim module so we don't have to call new Oblivious.ObliviousSlim()
+        libraryExport: 'ObliviousSlim' // Expose ObliviousSlim module so we don't have to call new Oblivious.ObliviousSlim(sodium)
     }
 }, config);
 

@@ -1,13 +1,23 @@
 {
   "name": "@nthparty/oblivious",
-  "version": "1.1.1",
+  "version": "1.2.2",
   "description": "JavaScript library that serves as an API for common primitives used to implement OPRF and OT protocols.",
-  "main": "dist/oblivious.js",
+  "main": "build/oblivious.js",
+  "types": "build/oblivious.d.ts",
+  "directories": {
+    "test": "test"
+  },
+  "files": [
+    "build/**",
+    "package.json",
+    "README.md",
+    "dist/**"
+  ],
   "scripts": {
-    "start": "tsc && node dist/oblivious.js",
+    "build": "tsc",
+    "dist": "webpack --mode=production",
     "test": "jest --coverage",
-    "lint": "eslint src",
-    "build": "webpack --mode=production"
+    "lint": "eslint src test/oblivious.test.ts"
   },
   "repository": {
     "type": "git",

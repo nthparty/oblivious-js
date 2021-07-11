@@ -21,27 +21,35 @@ primitives, consult materials about the
 [Ed25519](https://ed25519.cr.yp.to/) system and the
 [Ristretto](https://ristretto.group/) group.
 
-<!--
 Package Installation and Usage
 ------------------------------
 
-The package is available on PyPI:
+The package is available on npm:
 
-    npm install oblivious
+```shell
+npm install @nthparty/oblivious
+```
 
 The library can be imported in the usual ways:
 
-    import oblivious
-    from oblivious import *
--->
+```JavaScript
+const Oblivious = require('path/to/dist/oblivious.js');  // Standalone
+const Oblivious = require('path/to/dist/oblivious.js')(sodium);  // Slim
+const { Oblivious } = require('@nthparty/oblivious');  // Node.js
 
-Testing<!-- and Conventions-->
+Oblivious.ready.then(function () {
+    const p = Oblivious.Point.random();
+    console.log(p);  // Point(32) [Uint8Array] [ ... ]
+});
+```
+
+Testing and Conventions
 -----------------------
 
-<!--All unit tests are executed and their coverage is measured when using
-[mocha](https://mochajs.org/) (see `setup.cfg` for configution
+All unit tests are executed and their coverage measured when using
+[Jest](https://jestjs.io/) (see `jest.config.js` for configuration
 details):
-
+<!--
     mocha
 
 Concise unit tests are implemented with the help of
@@ -50,21 +58,24 @@ lists for these tests can be generated in the following way:-->
 
     npm test
 
-<!--Style conventions are enforced using [Pylint](https://www.pylint.org/):
+Style conventions are enforced using [Pylint](https://www.pylint.org/):
 
-    pylint oblivious test/test_oblivious
--->
+```shell
+eslint src test/oblivious.test.ts
+# - or -
+npm run-script lint
+```
 
 Contributions
 -------------
 
 In order to contribute to the source code, open an issue or submit a
-pull request on the GitHub page for this library.
+pull request on the GitHub page for this library.  Remember to run 
+`npm run-script lint` on any proposed code changes.
 
 Versioning
 ----------
 
 Beginning with version 0.1.0, the version number format for this library
 and the changes to the library associated with version number increments
-conform with [Semantic Versioning
-2.0.0](https://semver.org/#semantic-versioning-200).
+conform with [Semantic Versioning 2.0.0](https://semver.org/#semantic-versioning-200).
