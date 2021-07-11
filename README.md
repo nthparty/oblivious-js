@@ -58,11 +58,11 @@ lists for these tests can be generated in the following way:-->
 
     npm test
 
-Style conventions are enforced using [Pylint](https://www.pylint.org/):
+Style conventions are enforced using [ESLint](https://eslint.org/):
 
 ```shell
 eslint src test/oblivious.test.ts
-# - or -
+# -OR-
 npm run-script lint
 ```
 
