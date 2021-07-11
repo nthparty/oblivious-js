@@ -43,6 +43,8 @@ Oblivious.ready.then(function () {
 });
 ```
 
+The latest browser-optimized distributions can be found [here](https://unpkg.com/browse/@nthparty/oblivious/dist/).
+
 Testing and Conventions
 -----------------------
 
