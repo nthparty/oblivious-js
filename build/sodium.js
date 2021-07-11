@@ -7,10 +7,7 @@ exports.Sodium_init = void 0;
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-explicit-any
 function Sodium_init(sodium) {
     var _a;
-    return _a = class Sodium extends Uint8Array {
-            constructor(bs) {
-                super(bs);
-            }
+    return _a = class Sodium {
             /**
              * Return random non-zero scalar.
              * @returns {Uint8Array} Byte array representing a Ristretto255 scalar.

@@ -1,7 +1,7 @@
 import { Sodium_init } from './sodium';
 import { Elements_init } from './elements';
 
-const sodium = require('libsodium-wrappers-sumo');  // tslint:disable-line:no-var-
+const sodium = require('libsodium-wrappers-sumo');  // tslint:disable-line:no-var-requires
 const Sodium = Sodium_init(sodium);
 const { Point, Scalar } = Elements_init(Sodium);
 

@@ -34,7 +34,7 @@ The library can be imported in the usual ways:
 
 ```JavaScript
 const Oblivious = require('path/to/dist/oblivious.js');  // Standalone
-const Oblivious = require('path/to/dist/oblivious.js')(sodium);  // Slim
+const Oblivious = require('path/to/dist/oblivious.slim.js')(sodium);  // Slim
 const { Oblivious } = require('@nthparty/oblivious');  // Node.js
 
 Oblivious.ready.then(function () {
