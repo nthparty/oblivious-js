@@ -60,6 +60,9 @@ lists for these tests can be generated in the following way:-->
 
     npm test
 
+Browser-based tests are located in `test/browser/`, and you can run 
+them either locally, or by visiting [the preview](https://htmlpreview.github.io/?https://github.com/nthparty/oblivious-js/blob/main/test/browser/test.html).
+
 Style conventions are enforced using [ESLint](https://eslint.org/):
 
 ```shell
