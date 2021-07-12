@@ -1,6 +1,6 @@
 // tslint:disable:max-classes-per-file
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare const Buffer: any;
+// tslint:disable-next-line:no-var-requires
+const { Buffer } = require('buffer/');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/explicit-module-boundary-types
 export function Elements_init(Sodium: any): {'Point': any, 'Scalar': any } {
