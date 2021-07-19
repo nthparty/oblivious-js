@@ -61,11 +61,9 @@ export function Sodium_init(sodium: any): any { return class Sodium {
      * @returns {Uint8Array} Byte array representing a Ristretto255 point.
      */
     static pnt(bytes: Uint8Array): Uint8Array {
-        return sodium.crypto_core_ristretto255_from_hash(
-            Sodium.hash(
-                bytes === null ? Sodium.rnd() : bytes
-            )
-        );
+        return bytes === null
+            ? sodium.crypto_core_ristretto255_random()
+            : sodium.crypto_core_ristretto255_from_hash(bytes);
     }
 
     /**
