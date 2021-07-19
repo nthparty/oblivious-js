@@ -135,6 +135,15 @@ export function Sodium_init(sodium: any): any { return class Sodium {
     }
 
     /**
+     * Determine whether a given byte array constitutes a valid Ristretto255 point.
+     * @param {Uint8Array} m Byte array representing a Ristretto255 point candidate.
+     * @returns {boolean} Returns `true` if the point candidate is valid, otherwise `false`.
+     */
+    static vld(p: Uint8Array): boolean {
+        return sodium.crypto_core_ristretto255_valid(p);
+    }
+
+    /**
      * Return the hexadecimal representation of a byte array.
      * @param {Uint8Array} bytes Byte array of any length.
      * @returns {string} Hexadecimal number formatted as a UTF-8 string.
