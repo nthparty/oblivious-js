@@ -60,7 +60,9 @@ function Sodium_init(sodium) {
              * @returns {Uint8Array} Byte array representing a Ristretto255 point.
              */
             static pnt(bytes) {
-                return sodium.crypto_core_ristretto255_from_hash(Sodium.hash(bytes === null ? Sodium.rnd() : bytes));
+                return bytes === null
+                    ? sodium.crypto_core_ristretto255_random()
+                    : sodium.crypto_core_ristretto255_from_hash(bytes);
             }
             /**
              * Return base point multiplied by supplied scalar.
@@ -124,6 +126,14 @@ function Sodium_init(sodium) {
                 return sodium.crypto_hash_sha512(m);
             }
             /**
+             * Determine whether a given byte array constitutes a valid Ristretto255 point.
+             * @param {Uint8Array} m Byte array representing a Ristretto255 point candidate.
+             * @returns {boolean} Returns `true` if the point candidate is valid, otherwise `false`.
+             */
+            static vld(p) {
+                return sodium.crypto_core_ristretto255_valid(p);
+            }
+            /**
              * Return the hexadecimal representation of a byte array.
              * @param {Uint8Array} bytes Byte array of any length.
              * @returns {string} Hexadecimal number formatted as a UTF-8 string.
@@ -138,6 +148,38 @@ function Sodium_init(sodium) {
              */
             static from_hex(hex) {
                 return sodium.from_hex(hex);
+            }
+            /**
+             * Return the Base64 encoding of a byte array.
+             * @param {Uint8Array} bytes Byte array of any length.
+             * @returns {string} Base64 UTF-8 string representation of the bytes.
+             */
+            static to_base64(bytes) {
+                return sodium.to_base64(bytes, 1);
+            }
+            /**
+             * Return a new byte array from its representation in Base64.
+             * @param {string} s Base64 UTF-8 string representation of the bytes.
+             * @returns {Uint8Array} Byte array corresponding to the Base64 encoding.
+             */
+            static from_base64(s) {
+                return sodium.from_base64(s, 1);
+            }
+            /**
+             * Return the UTF-8 string encoding of a byte array.
+             * @param {Uint8Array} bytes Byte array of any length.
+             * @returns {string} UTF-8 string representation of the bytes.
+             */
+            static to_string(bytes) {
+                return sodium.to_string(bytes);
+            }
+            /**
+             * Return a new byte array from a UTF-8 string.
+             * @param {string} s UTF-8 string representation of the bytes.
+             * @returns {Uint8Array} Byte array corresponding to the UTF-8 standard.
+             */
+            static from_string(s) {
+                return sodium.from_string(s);
             }
             /**
              * Return -1, 0 or -1 depending on whether the bytes1 is less than,

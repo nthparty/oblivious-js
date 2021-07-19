@@ -1,6 +1,4 @@
 // tslint:disable:max-classes-per-file
-// tslint:disable-next-line:no-var-requires
-const { Buffer } = require('buffer/');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/explicit-module-boundary-types
 export function Elements_init(Sodium: any): {'Point': any, 'Scalar': any } {
@@ -60,12 +58,30 @@ export function Elements_init(Sodium: any): {'Point': any, 'Scalar': any } {
         }
 
         /**
-         * Convert Base64 UTF-8 string representation of a point to a point instance.
+         * Convert Base64 UTF-8 string representation of a point to a `Point` instance.
          * @param {string} s Base64 UTF-8 string representation of a point.
          * @returns {Point} Ristretto255 point object.
          */
         static from_base64(s: string): Point {
-            return Buffer.from(s, 'base64');
+            return new Point(Sodium.from_base64(s));
+        }
+
+        /**
+         * Convert hexadecimal representation of a point to a `Point` instance.
+         * @param {string} hex Hexadecimal representation of a point.
+         * @returns {Point} Ristretto255 point object.
+         */
+        static from_hex(hex: string): Point {
+            return new Point(Sodium.from_hex(hex));
+        }
+
+        /**
+         * Convert Base64 UTF-8 string representation of a point to a `Point` instance.
+         * @param {string} s Base64 UTF-8 string representation of a point.
+         * @returns {Point} Ristretto255 point object.
+         */
+        static from_string(s: string): Point {
+            return new Point(Sodium.from_string(s));
         }
 
         /**
@@ -111,7 +127,23 @@ export function Elements_init(Sodium: any): {'Point': any, 'Scalar': any } {
          * @returns {string} Base64 UTF-8 string representation of the point.
          */
         to_base64(this: Point): string {
-            return Buffer.from(this).toString('base64');
+            return Sodium.to_base64(this);
+        }
+
+        /**
+         * Convert to equivalent hexadecimal UTF-8 string representation.
+         * @returns {string} Hexadecimal UTF-8 string representation of the point.
+         */
+        to_hex(this: Point): string {
+            return Sodium.to_hex(this);
+        }
+
+        /**
+         * Convert to equivalent UTF-8 string representation.
+         * @returns {string} UTF-8 string representation of the point.
+         */
+        to_string(this: Point): string {
+            return Sodium.to_string(this);
         }
     }
 
@@ -176,12 +208,30 @@ export function Elements_init(Sodium: any): {'Point': any, 'Scalar': any } {
         }
 
         /**
-         * Convert Base64 UTF-8 string representation of a scalar to a scalar instance.
+         * Convert Base64 UTF-8 string representation of a scalar to a `Scalar` instance.
          * @param {string} s Base64 UTF-8 string representation of a scalar.
          * @returns {Scalar} Ristretto255 scalar object.
          */
         static from_base64(s: string): Scalar {
-            return Buffer.from(s, 'base64');
+            return new Scalar(Sodium.from_base64(s));
+        }
+
+        /**
+         * Convert hexadecimal representation of a scalar to a `Scalar` instance.
+         * @param {string} hex Hexadecimal representation of a scalar.
+         * @returns {Point} Ristretto255 scalar object.
+         */
+        static from_hex(hex: string): Scalar {
+            return new Scalar(Sodium.from_hex(hex));
+        }
+
+        /**
+         * Convert Base64 UTF-8 string representation of a scalar to a `Scalar` instance.
+         * @param {string} s Base64 UTF-8 string representation of a scalar.
+         * @returns {Point} Ristretto255 scalar object.
+         */
+        static from_string(s: string): Scalar {
+            return new Scalar(Sodium.from_string(s));
         }
 
         /**
@@ -251,7 +301,23 @@ export function Elements_init(Sodium: any): {'Point': any, 'Scalar': any } {
          * @returns {string} Base64 UTF-8 string representation of the scalar.
          */
         to_base64(this: Scalar): string {
-            return Buffer.from(this).toString('base64');
+            return Sodium.to_base64(this);
+        }
+
+        /**
+         * Convert to equivalent hexadecimal UTF-8 string representation.
+         * @returns {string} Hexadecimal UTF-8 string representation of the scalar.
+         */
+        to_hex(this: Scalar): string {
+            return Sodium.to_hex(this);
+        }
+
+        /**
+         * Convert to equivalent UTF-8 string representation.
+         * @returns {string} UTF-8 string representation of the scalar.
+         */
+        to_string(this: Scalar): string {
+            return Sodium.to_string(this);
         }
     }
 
