@@ -1,0 +1,177 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>@nthparty/oblivious</title>
+	<meta name="description" content="Documentation for @nthparty/oblivious">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">@nthparty/oblivious</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1>@nthparty/oblivious</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#oblivious-js" id="oblivious-js" style="color: inherit; text-decoration: none;">
+					<h1>oblivious-js</h1>
+				</a>
+				<p><a href="https://www.npmjs.com/package/@nthparty/oblivious"><img src="https://badge.fury.io/js/%40nthparty%2Foblivious.svg" alt="npm version"></a>
+					<a href="https://github.com/nthparty/oblivious-js/actions"><img src="https://github.com/nthparty/oblivious-js/workflows/Test%20Coveralls/badge.svg" alt="GitHub Actions Status"></a>
+				<a href="https://coveralls.io/github/nthparty/oblivious-js?branch=main"><img src="https://coveralls.io/repos/github/nthparty/oblivious-js/badge.svg?branch=main" alt="Coverage Status"></a></p>
+				<p>JavaScript library that serves as an API for common primitives used to implement OPRF and OT protocols.</p>
+				<a href="#purpose" id="purpose" style="color: inherit; text-decoration: none;">
+					<h2>Purpose</h2>
+				</a>
+				<p>This library provides TypeScript
+					<a href="https://github.com/jedisct1/libsodium">libsodium</a> wrappers for
+					cryptographic primitives that are often used to implement <a href="https://en.wikipedia.org/wiki/Pseudorandom_function_family">oblivious
+						pseudorandom function
+					(OPRF)</a> and
+					<a href="https://en.wikipedia.org/wiki/Oblivious_transfer">oblivious transfer
+				(OT)</a> protocols.</p>
+				<p>For more information on the underlying mathematical structures and
+					primitives, consult materials about the
+					<a href="https://ed25519.cr.yp.to/">Ed25519</a> system and the
+				<a href="https://ristretto.group/">Ristretto</a> group.</p>
+				<a href="#package-installation-and-usage" id="package-installation-and-usage" style="color: inherit; text-decoration: none;">
+					<h2>Package Installation and Usage</h2>
+				</a>
+				<p>The package is available on npm:</p>
+				<pre><code class="language-shell">npm install @nthparty/oblivious
+</code></pre>
+				<p>The library can be imported in the usual ways:</p>
+				<pre><code class="language-JavaScript"><span class="hljs-keyword">const</span> Oblivious = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;path/to/dist/oblivious.js&#x27;</span>);  <span class="hljs-comment">// Standalone</span>
+<span class="hljs-keyword">const</span> Oblivious = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;path/to/dist/oblivious.slim.js&#x27;</span>)(sodium);  <span class="hljs-comment">// Slim</span>
+<span class="hljs-keyword">const</span> { Oblivious } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@nthparty/oblivious&#x27;</span>);  <span class="hljs-comment">// Node.js</span>
+
+Oblivious.ready.then(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">const</span> p = Oblivious.Point.random();
+    <span class="hljs-built_in">console</span>.log(p);  <span class="hljs-comment">// Point(32) [Uint8Array] [ ... ]</span>
+});
+</code></pre>
+				<p>The latest browser-optimized distributions can be found <a href="https://unpkg.com/browse/@nthparty/oblivious/dist/">here</a>.</p>
+				<a href="#testing-and-conventions" id="testing-and-conventions" style="color: inherit; text-decoration: none;">
+					<h2>Testing and Conventions</h2>
+				</a>
+				<p>All unit tests are executed and their coverage measured when using
+					<a href="https://jestjs.io/">Jest</a> (see <code>jest.config.js</code> for configuration
+				details):</p>
+				<!--
+    mocha
+
+Concise unit tests are implemented with the help of
+[fountains](https://pypi.org/project/fountains/) and new reference bit
+lists for these tests can be generated in the following way:-->
+				<pre><code>npm <span class="hljs-built_in">test</span>
+</code></pre>
+				<p>Browser-based tests are located in <code>test/browser/</code>, and you can run
+				them either locally, or by visiting <a href="https://htmlpreview.github.io/?https://github.com/nthparty/oblivious-js/blob/main/test/browser/test.html">the preview</a>.</p>
+				<p>Style conventions are enforced using <a href="https://eslint.org/">ESLint</a>:</p>
+				<pre><code class="language-shell">eslint src test/oblivious.test.ts
+<span class="hljs-meta">#</span><span class="bash"> -OR-</span>
+npm run-script lint
+</code></pre>
+				<a href="#contributions" id="contributions" style="color: inherit; text-decoration: none;">
+					<h2>Contributions</h2>
+				</a>
+				<p>In order to contribute to the source code, open an issue or submit a
+					pull request on the GitHub page for this library.  Remember to run
+				<code>npm run-script lint</code> on any proposed code changes.</p>
+				<a href="#versioning" id="versioning" style="color: inherit; text-decoration: none;">
+					<h2>Versioning</h2>
+				</a>
+				<p>Beginning with version 0.1.0, the version number format for this library
+					and the changes to the library associated with version number increments
+				conform with <a href="https://semver.org/#semantic-versioning-200">Semantic Versioning 2.0.0</a>.</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/oblivious.html">&quot;oblivious&quot;</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
